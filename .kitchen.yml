@@ -1,0 +1,33 @@
+---
+driver:
+  name: docker
+  hostname: localhost
+  publish_all: true
+
+provisioner:
+  name: chef_zero
+  # You may wish to disable always updating cookbooks in CI or other testing environments.
+  # For example:
+  #   always_update_cookbooks: <%= !ENV['CI'] %>
+  always_update_cookbooks: true
+
+verifier:
+  name: inspec
+
+platforms:
+  - name: centos-7
+
+suites:
+  - name: default
+    attributes: { "jmeter" : { "script" : "http://sample-domain.com/path/to/you/jmeter.jmx" } }
+    run_list:
+    # For debugging
+      - recipe[jmeter::logger]
+      - recipe[jmeter::default]
+      - recipe[jmeter::install_centos_java]
+      - recipe[jmeter::install_jmeter]
+      - recipe[jmeter::install_phantomjs]
+      #  - recipe[jmeter::run_script]
+    verifier:
+      inspec_tests:
+        - test/integration/default
