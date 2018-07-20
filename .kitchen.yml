@@ -19,15 +19,12 @@ platforms:
 
 suites:
   - name: default
-    attributes: { "jmeter" : { "script" : "http://sample-domain.com/path/to/you/jmeter.jmx" } }
+    # attributes: { "jmeter" : { "script" : "http://sample-domain.com/path/to/you/jmeter.jmx" } }
+    attributes: { "jmeter" : { "script" : "https://s3.amazonaws.com/static.cloudsna.com/store/test/plugins/jmeter-store.jmx" } }
     run_list:
-    # For debugging
       - recipe[jmeter::logger]
       - recipe[jmeter::default]
       - recipe[jmeter::install_centos_java]
       - recipe[jmeter::install_jmeter]
       - recipe[jmeter::install_phantomjs]
-      #  - recipe[jmeter::run_script]
-    verifier:
-      inspec_tests:
-        - test/integration/default
+      - recipe[jmeter::run_script]
